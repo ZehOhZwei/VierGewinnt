@@ -31,7 +31,7 @@ public class GameAPI {
 				checkForDraw();
 				return;
 			}
-		}
+		}     
 		return;
 	}
 	

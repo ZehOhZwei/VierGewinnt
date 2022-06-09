@@ -5,16 +5,27 @@ public class GameAPI {
 	public int _x=6;
 	public int _y=5;
 	public int turn;
-	public Player player1;
-	public Player player2;
+	public boolean againstBot;
+	public Bot _bot;
 	
-	public GameAPI(int w, int h, Player p1, Player p2)
+	public GameAPI(int w, int h)
 	{
+		againstBot=false;
 		_x=w;
 		_y=h;
 		_board = new int[_x][_y];
-		player1=p1;
-		player2=p2;
+		Random random= new Random();
+		turn = random.nextInt(1, 2);
+		
+	}
+	
+	public GameAPI(int w, int h, Bot bot)
+	{
+		againstBot=true;		
+		_bot=bot;
+		_x=w;
+		_y=h;
+		_board = new int[_x][_y];
 		Random random= new Random();
 		turn = random.nextInt(1, 2);
 		
@@ -160,7 +171,17 @@ public class GameAPI {
 	public boolean checkForWin()
 	{
 		
-		return true;
+		for(int i=0; i<=_y;i++)
+		{
+			for(int j=0;j<=_x;j++)
+			{
+				if(checkForWin(i, j)) 
+					{
+					return true;
+					}
+			}
+		}
+		return false;
 	}
 	
 	

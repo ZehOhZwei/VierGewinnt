@@ -1,5 +1,10 @@
 public class GameController {
 	public static void main(String args[]) {
-		new GameUI();	  	
+		new GameUI();	
+		
+	}
+
+	public static void startGame() {
+		GameAPI gameapi=new GameAPI(6,5);
 	}
 }

@@ -1,4 +1,6 @@
 
-public interface Bot {
-	public int takeTurn();
+public class Bot implements Player {
+	public int takeTurn() {
+		return 0;
+	}
 }

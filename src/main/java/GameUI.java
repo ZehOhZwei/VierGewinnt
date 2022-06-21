@@ -6,14 +6,13 @@ import javax.swing.*;
 public class GameUI{
 	
 	//Settings
+	
 	boolean withBot=false;
 	Bot botType;
 	int gameMode=0;
 	int _height;
 	int _width;
-			
-	GameAPI game;
-	
+				
 	JFrame window;
 	JPanel gameSelection;
 	JPanel choiceContainer;
@@ -60,7 +59,6 @@ public class GameUI{
 	
 	public void startGame()
 	{
-		GameAPI gameapi=new GameAPI(6,5);
-		new IngameUI(gameapi);
+		GameController.startGame();
 	}
 }

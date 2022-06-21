@@ -1,4 +1,4 @@
 
 interface Player {
-	public void takeTurn();
+	public int takeTurn();
 }

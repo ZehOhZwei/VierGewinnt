@@ -1,5 +1,6 @@
+import javax.swing.JPanel;
 
-public class IngameUI {
+public class IngameUI extends JPanel{
 
 	GameAPI _gameapi;
 	

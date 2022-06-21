@@ -1,22 +1,26 @@
 import java.util.Random;
 //comment
 public class GameAPI {
+	public IngameUI ui;
 	public int[][] _board;
 	public int _x=6;
 	public int _y=5;
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
+	public Player player1;
 	
 	public GameAPI(int w, int h)
 	{
+		ui = new IngameUI(this);
+
 		againstBot=false;
 		_x=w;
 		_y=h;
 		_board = new int[_x][_y];
 		Random random= new Random();
 		turn = random.nextInt(1, 2);
-		
+		player1 = new Human(this);
 	}
 	
 	public GameAPI(int w, int h, Bot bot)

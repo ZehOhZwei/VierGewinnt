@@ -1,6 +1,6 @@
 
 public class Bot implements Player {
-	public int takeTurn() {
+	public int getCurrentColumn(){
 		return 0;
 	}
 }

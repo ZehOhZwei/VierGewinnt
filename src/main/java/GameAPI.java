@@ -3,24 +3,27 @@ import java.util.Random;
 public class GameAPI {
 	public IngameUI ui;
 	public int[][] _board;
-	public int _x=6;
-	public int _y=5;
+	public int _x;
+	public int _y;
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
 	public Player player1;
+	public Player player2;
+	private boolean gameOngoing;
 	
 	public GameAPI(int w, int h)
 	{
-		ui = new IngameUI(this);
+		ui = new IngameUI(this, w, h);
 
 		againstBot=false;
-		_x=w;
-		_y=h;
-		_board = new int[_x][_y];
+		_board = new int[w][h];
+		_x = w;
+		_y = h;
 		Random random= new Random();
 		turn = random.nextInt(1, 2);
 		player1 = new Human(this);
+		player2 = new Human(this);
 	}
 	
 	public GameAPI(int w, int h, Bot bot)
@@ -35,15 +38,31 @@ public class GameAPI {
 		
 	}
 	
+	private void game() {
+		while(gameOngoing) {
+			if(turn == 1) {
+				dropStone(player1.getCurrentColumn());
+				turn = 2;
+			}
+			else if(turn == 2) {
+				dropStone(player2.getCurrentColumn());
+				turn = 1;
+			}
+		}
+	}
+	
 	public void dropStone(int column)
 	{
+		System.out.println("Dropping piece in column " + (column + 1));
 		for(int i=0;i<=_y;i++)
 		{
 			if (_board[column][i]==0)
 			{
 				_board[column][i]=turn;
-				checkForWin(column, i);
-				checkForDraw();
+				if(checkForWin(column, i)) {
+					System.out.println("Spieler " + turn + " Gewinnt");
+				}
+				//checkForDraw();
 				return;
 			}
 		}     
@@ -171,24 +190,7 @@ public class GameAPI {
 	{
 		return(checkHorizontal(x, y) || checkVertical(x, y) ||checkDiagonalRising(x, y)||checkDiagonalRising(x, y));
 	}
-	
-	public boolean checkForWin()
-	{
-		
-		for(int i=0; i<=_y;i++)
-		{
-			for(int j=0;j<=_x;j++)
-			{
-				if(checkForWin(i, j)) 
-					{
-					return true;
-					}
-			}
-		}
-		return false;
-	}
-	
-	
+
 	public boolean checkForDraw()
 	{
 		for(int i=0;i<=_x;i++)

@@ -5,26 +5,29 @@ import java.io.IOException;
 public class Human implements KeyListener, Player {
 	GameAPI api;
 	int currentColumn;
-	private boolean confirm;
+	private boolean confirm = false;
 	
 	public Human(GameAPI gameApi) {
 		api = gameApi;
-		api.ui.addKeyListener(this);
+		api.ui.window.addKeyListener(this);
 
 	}
 	
 	@Override
-	public int takeTurn() {
-		while(!confirm) {
-			System.out.println(currentColumn);
-		}
+	public int getCurrentColumn() {
 		return currentColumn;
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(e.getKeyCode() == 51 && currentColumn > 0) {
+		if(e.getKeyCode() == 29 && currentColumn >= 0) {
+			currentColumn -= 1;
+		}
+		if(e.getKeyCode() == 32 && currentColumn <= 0) {
 			currentColumn += 1;
+		}
+		if(e.getKeyCode() == 62 && currentColumn > 0) {
+			confirm = true;
 		}
 	}
 

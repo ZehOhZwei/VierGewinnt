@@ -5,6 +5,6 @@ public class GameController {
 	}
 
 	public static void startGame() {
-		GameAPI gameapi=new GameAPI(6,5);
+		GameAPI gameapi=new GameAPI(7,6);
 	}
 }

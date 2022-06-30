@@ -1,4 +1,5 @@
 
 interface Player {
-	public int takeTurn();
+
+	public int getCurrentColumn();
 }

@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Choice;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
@@ -60,5 +61,7 @@ public class GameUI{
 	public void startGame()
 	{
 		GameController.startGame();
+		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+
 	}
 }

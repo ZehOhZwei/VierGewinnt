@@ -69,30 +69,41 @@ public class GameAPI {
 		return;
 	}
 	
+	//Diese genesteten if-statements sind nötig, weil ansonsten über die Bounds des Arrays hinausgegangen wird
 	public boolean checkHorizontal(int x, int y)
 	{
 		int i=1;
-		if (x-1>=0 && _board[x-1][y]==turn)
-		{
-			i++;
-			if (x-2>=0 && _board[x-2][y]==turn)
-			{
+		if (x-1>=0) {
+			if  (_board[x-1][y]==turn){
 				i++;
-				if (x-3>=0 && _board[x-3][y]==turn)
-				{
-					i++;
+				if (x-2>=0) {
+					if( _board[x-2][y]==turn){
+						i++;
+						if (x-3>=0) {
+							if (_board[x-3][y]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
-		if (x+1>=_x && _board[x+1][y]==turn)
-		{
-			i++;
-			if (x+2>=_x && _board[x+2][y]==turn)
-			{
+		if (x+1>_x) {
+			if  (_board[x+1][y]==turn){
 				i++;
-				if (x+3>=_x && _board[x+3][y]==turn)
-				{
-					i++;
+				if (x+2>_x) {
+					if( _board[x+2][y]==turn){
+						i++;
+						if (x+3>_x) {
+							if (_board[x+3][y]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -101,27 +112,37 @@ public class GameAPI {
 	public boolean checkVertical(int x, int y)
 	{
 		int i=1;
-		if (y-1>=0 && _board[x][y-1]==turn)
-		{
-			i++;
-			if (y-2>=0 && _board[x][y-2]==turn)
-			{
+		if (y-1>=0) {
+			if  (_board[x][y-1]==turn){
 				i++;
-				if (y-3>=0 && _board[x][y-3]==turn)
-				{
-					i++;
+				if (y-2>=0) {
+					if( _board[x][y-2]==turn){
+						i++;
+						if (y-3>=0) {
+							if (_board[x][y-3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
-		if (y+1>=_y && _board[x][y+1]==turn)
-		{
-			i++;
-			if (y+2>=_y && _board[x][y+2]==turn)
-			{
+		if (y+1>_x) {
+			if  (_board[x][y+1]==turn){
 				i++;
-				if (y+3>=_y && _board[x][y+3]==turn)
-				{
-					i++;
+				if (y+2>_x) {
+					if( _board[x][y+2]==turn){
+						i++;
+						if (y+3>_x) {
+							if (_board[x][y+3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -130,27 +151,38 @@ public class GameAPI {
 	public boolean checkDiagonalRising(int x, int y)
 	{
 		int i=1;
-		if (x-1>=0 && y-1>=0 && _board[x-1][y-1]==turn)
-		{
-			i++;
-			if (x-2>=0 && y-2>=0 && _board[x-2][y-2]==turn)
-			{
+
+		if (x-1>=0 && y-1>=0) {
+			if  ( _board[x-1][y-1]==turn){
 				i++;
-				if (x-3>=0 && y-3>=0 && _board[x-3][y-3]==turn)
-				{
-					i++;
+				if (x-2>=0 && y-2>=0) {
+					if( _board[x-2][y-2]==turn){
+						i++;
+						if (x-3>=0 && y-3>=0) {
+							if (_board[x-3][y-3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
-		if (x+1>=_x && y+1>=_y && _board[x+1][y+1]==turn)
-		{
-			i++;
-			if (x+2>=_x && y+2>=_y && _board[x+2][y+2]==turn)
-			{
+		if (x+1>=_x && y+1>=_y) {
+			if  (_board[x+1][y+1]==turn){
 				i++;
-				if (x+3>=_x && y+3>=_y && _board[x+3][y+3]==turn)
-				{
-					i++;
+				if (x+2>=_x && y+2>=_y) {
+					if(_board[x+2][y+2]==turn){
+						i++;
+						if (x+3>=_x && y+3>=_y) {
+							if ( _board[x+3][y+3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -159,27 +191,37 @@ public class GameAPI {
 	public boolean checkDiagonalFalling(int x, int y)
 	{
 		int i=1;
-		if (x-1>=0 && y+1>=_y && _board[x-1][y+1]==turn)
-		{
-			i++;
-			if (x-2>=0 && y+2>=_y && _board[x-2][y+2]==turn)
-			{
+		if (x-1>=0 && y+1>=0) {
+			if  ( _board[x-1][y+1]==turn){
 				i++;
-				if (x-3>=0 && y+3>=_y && _board[x-3][y+3]==turn)
-				{
-					i++;
+				if (x-2>=0 && y+2>=0) {
+					if( _board[x-2][y+2]==turn){
+						i++;
+						if (x-3>=0 && y+3>=0) {
+							if (_board[x-3][y+3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}
-		if (x+1>=_x && y-1>=0 && _board[x+1][y-1]==turn)
-		{
-			i++;
-			if (x+2>=_x && y-2>=0 && _board[x+2][y-2]==turn)
-			{
+		if (x+1>=_x && y-1>=_y) {
+			if  (_board[x+1][y-1]==turn){
 				i++;
-				if (x+3>=_x && y-3>=0 && _board[x+3][y-3]==turn)
-				{
-					i++;
+				if (x+2>=_x && y-2>=_y) {
+					if(_board[x+2][y-2]==turn){
+						i++;
+						if (x+3>=_x && y-3>=_y) {
+							if ( _board[x+3][y-3]==turn)
+						
+							{
+								i++;
+							}
+						}
+					}
 				}
 			}
 		}

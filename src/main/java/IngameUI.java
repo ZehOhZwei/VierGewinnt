@@ -7,14 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class IngameUI {
+public class IngameUI{
 
 	GameAPI _gameapi;
 	public JFrame window;
 	JPanel gamePanel;
 	JPanel buttonPanel;
-	JPanel fieldPanel;
+	FieldPanel fieldPanel;
 	JButton[] columnButtons;
+	
 	
 	public IngameUI(GameAPI gameapi, int w, int h)
 	{
@@ -22,7 +23,7 @@ public class IngameUI {
 		gamePanel.setLayout(new BorderLayout());
 		columnButtons= new JButton[w];
 		buttonPanel = new JPanel();
-		fieldPanel = new JPanel();
+		fieldPanel = new FieldPanel(w, h);
 		fieldPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		gamePanel.add(buttonPanel, BorderLayout.NORTH);
 		gamePanel.add(fieldPanel, BorderLayout.CENTER);
@@ -38,10 +39,13 @@ public class IngameUI {
 			buttonPanel.add(columnButtons[i]);
 			columnButtons[i].addActionListener(e -> {_gameapi.dropStone(iFinal);});	
 		}
-		drawField();
-	}
-	
-	void drawField() {
 
 	}
+
+	public void dropStone(int column, int row, int turn) {
+		fieldPanel.dropStone(column, row, turn);
+	}
+	
+	
+
 }

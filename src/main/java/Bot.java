@@ -1,5 +1,5 @@
 
-public class Bot implements Player {
+public class Bot  {
 	public int getCurrentColumn(){
 		return 0;
 	}

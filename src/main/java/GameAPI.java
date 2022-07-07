@@ -8,9 +8,6 @@ public class GameAPI {
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
-	public Player player1;
-	public Player player2;
-	private boolean gameOngoing;
 	
 	public GameAPI(int w, int h)
 	{
@@ -22,8 +19,6 @@ public class GameAPI {
 		_y = h;
 		Random random= new Random();
 		turn = random.nextInt(1, 2);
-		player1 = new Human(this);
-		player2 = new Human(this);
 	}
 	
 	public GameAPI(int w, int h, Bot bot)
@@ -38,19 +33,6 @@ public class GameAPI {
 		
 	}
 	
-	private void game() {
-		while(gameOngoing) {
-			if(turn == 1) {
-				dropStone(player1.getCurrentColumn());
-				turn = 2;
-			}
-			else if(turn == 2) {
-				dropStone(player2.getCurrentColumn());
-				turn = 1;
-			}
-		}
-	}
-	
 	public void dropStone(int column)
 	{
 		System.out.println("Dropping piece in column " + (column + 1));
@@ -60,7 +42,10 @@ public class GameAPI {
 			{
 				_board[column][i]=turn;
 				ui.dropStone(column, i, turn);
-				turn = (turn % 2) +1;
+
+				if(turn == 1) turn = 2;
+				else if(turn == 2) turn = 1;
+				
 				if(checkForWin(column, i)) {
 					System.out.println("Spieler " + turn + " Gewinnt");
 				}

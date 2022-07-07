@@ -38,18 +38,6 @@ public class GameAPI {
 		
 	}
 	
-	private void game() {
-		while(gameOngoing) {
-			if(turn == 1) {
-				dropStone(player1.getCurrentColumn());
-				turn = 2;
-			}
-			else if(turn == 2) {
-				dropStone(player2.getCurrentColumn());
-				turn = 1;
-			}
-		}
-	}
 	
 	public void dropStone(int column)
 	{
@@ -59,12 +47,12 @@ public class GameAPI {
 			if (_board[column][i]==0)
 			{
 				_board[column][i]=turn;
-				ui.dropStone(column, i, turn);
+				ui.showStone(column, i, turn);
 				turn = (turn % 2) +1;
 				if(checkForWin(column, i)) {
 					System.out.println("Spieler " + turn + " Gewinnt");
 				}
-				//checkForDraw();
+				checkForDraw();
 				return;
 			}
 		}     
@@ -233,7 +221,7 @@ public class GameAPI {
 	
 	public boolean checkForWin(int x, int y)
 	{
-		return(checkHorizontal(x, y) || checkVertical(x, y) ||checkDiagonalRising(x, y)||checkDiagonalRising(x, y));
+		return(checkHorizontal(x, y) || checkVertical(x, y) ||checkDiagonalRising(x, y)||checkDiagonalFalling(x, y));
 	}
 
 	public boolean checkForDraw()
@@ -248,6 +236,25 @@ public class GameAPI {
 		return true;
 	}
 	
+	public int getHeight() {
+		return _y;
+	}
+	
+	public int getWidth() {
+		return _x;
+	}
+	
+	public int getHighestEmptySpace(int column)
+	{
+		for(int i=0;i<=_y;i++)
+		{
+			if (_board[column][i]==0)
+			{
+				return i;
+			}
+		}    
+		return -1;
+	}
 	
 	
 

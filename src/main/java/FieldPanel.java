@@ -9,19 +9,20 @@ public class FieldPanel extends JPanel {
 	private int rows;
 	private int columns;
 	
-	private int[][] steine;
+	private int[][] stones;
 
 	public FieldPanel(int w, int h) {
 		columns = w;
 		rows = h;
-		steine = new int[w][h];
+		stones = new int[w][h];
 		for (int i = 0; i <= w; i++) {
 			for (int j = 0; i <= h; i++) {
-				steine[i][j] = 0;
+				stones[i][j] = 0;
 			}
 		}
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);
 		g.setPaintMode();
@@ -35,25 +36,27 @@ public class FieldPanel extends JPanel {
 
 		for (int i = 0; i <= columns; i++) {
 			for (int j = 0; i <= rows; i++) {
-				switch (steine[i][j]) {
+				switch (stones[i][j]) {
 				case 1:
-					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* i , Color.red, g);
+					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* j , Color.red, g);
 					System.out.println("drawing");
 				case 2:
-					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* i , Color.blue, g);
+					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* j , Color.blue, g);
 				}
 			}
 		
 		}
 	}
+	
+	
 	public void dropStone(int column, int row, int turn) {
-		steine[column][row] = turn;
+		stones[column][row] = turn;
 		
 	}
 	
 	private void drawCircle(int x, int y, Color c, Graphics g) {
 		g.setColor(c);
 		
-		g.drawOval(x-10, y-10, x+10, y+10);
+		g.drawOval(x-10, y-10, 20, 20);
 	}
 }

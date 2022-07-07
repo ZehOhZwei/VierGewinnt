@@ -31,7 +31,7 @@ public class IngameUI{
 		window = new JFrame(); 
 		window.add(gamePanel);
 		//window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		window.setSize(500, 400);
+		window.setSize(720, 676);
 		window.setVisible(true);
 		for(int i = 0; i < w ; i++) {
 			final int iFinal = i; //This looks really horrible but is necessary. i can't be referenced in the enclosed space

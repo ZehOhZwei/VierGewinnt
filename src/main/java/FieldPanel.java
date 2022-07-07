@@ -21,6 +21,10 @@ public class FieldPanel extends JPanel {
 		rows = h;
 		ui = ingameUi;
 	}
+	
+	public void dropStone(int column, int row, int turn) {
+		super.repaint();
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -41,22 +45,22 @@ public class FieldPanel extends JPanel {
 				switch (ui._gameapi._board[i][j]) {
 				case 1:
 					drawCircle((this.getWidth()/(columns * 2)) + this.getWidth() / columns * i,
-							this.getHeight() - (this.getHeight()/(rows * 2)) + this.getHeight() / rows * j, 
-							Color.blue, g);
+							this.getHeight() - (this.getHeight()/(rows * 2)) - this.getHeight() / rows * j, 
+							Color.red, g);
+						break;
 				case 2:
 					drawCircle((this.getWidth()/(columns * 2)) + this.getWidth() / columns * i,
-							this.getHeight() - (this.getHeight()/(rows * 2)) + this.getHeight() / rows * j, 
-							Color.red, g);
+							this.getHeight() - (this.getHeight()/(rows * 2)) - this.getHeight() / rows * j, 
+							Color.blue, g);
+						break;
+				default:
+					
 				}
 			}
 		
 		}
 	}
 	
-	
-	public void dropStone(int column, int row, int turn) {
-		super.repaint();
-	}
 	
 	private void drawCircle(int x, int y, Color c, Graphics g) {
 		g.setColor(c);

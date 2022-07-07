@@ -35,7 +35,7 @@ public class GameAPI {
 	
 	public void dropStone(int column)
 	{
-		System.out.println("Dropping piece in column " + (column + 1));
+		System.out.println("Player " + turn + " drops piece in column " + (column + 1));
 		for(int i=0;i<=_y;i++)
 		{
 			if (_board[column][i]==0)
@@ -43,13 +43,13 @@ public class GameAPI {
 				_board[column][i]=turn;
 				ui.dropStone(column, i, turn);
 
-				if(turn == 1) turn = 2;
-				else if(turn == 2) turn = 1;
 				
 				if(checkForWin(column, i)) {
 					System.out.println("Spieler " + turn + " Gewinnt");
 				}
 				//checkForDraw();
+				if(turn == 1) turn = 2;
+				else if(turn == 2) turn = 1;
 				return;
 			}
 		}     
@@ -218,7 +218,7 @@ public class GameAPI {
 	
 	public boolean checkForWin(int x, int y)
 	{
-		return(checkHorizontal(x, y) || checkVertical(x, y) ||checkDiagonalRising(x, y)||checkDiagonalRising(x, y));
+		return(checkHorizontal(x, y) || checkVertical(x, y) ||checkDiagonalRising(x, y)||checkDiagonalFalling(x, y));
 	}
 
 	public boolean checkForDraw()

@@ -33,6 +33,7 @@ public class GameAPI {
 		
 	}
 	
+	
 	public void dropStone(int column)
 	{
 		System.out.println("Player " + turn + " drops piece in column " + (column + 1));
@@ -42,6 +43,7 @@ public class GameAPI {
 			{
 				_board[column][i]=turn;
 				ui.dropStone(column, i, turn);
+
 
 				
 				if(checkForWin(column, i)) {
@@ -233,7 +235,25 @@ public class GameAPI {
 		return true;
 	}
 	
+	public int getHeight() {
+		return _y;
+	}
 	
+	public int getWidth() {
+		return _x;
+	}
+	
+	public int getHighestEmptySpace(int column)
+	{
+		for(int i=0;i<=_y;i++)
+		{
+			if (_board[column][i]==0)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
 	
 
 }

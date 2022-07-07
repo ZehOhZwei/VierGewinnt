@@ -1,6 +1,3 @@
-
-public class Bot  {
-	public int getCurrentColumn(){
-		return 0;
-	}
+public interface Bot  {
+	public int makeTurn(GameAPI board);
 }

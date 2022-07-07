@@ -42,7 +42,7 @@ public class IngameUI{
 
 	}
 
-	public void showStone(int column, int row, int turn) {
+	public void dropStone(int column, int row, int turn) {
 		fieldPanel.dropStone(column, row, turn);
 	}
 	

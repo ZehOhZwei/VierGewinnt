@@ -42,7 +42,7 @@ public class GameAPI {
 			if (_board[column][i]==0)
 			{
 				_board[column][i]=turn;
-				ui.showStone(column, i, turn);
+				ui.dropStone(column, i, turn);
 				turn = (turn % 2) +1;
 				if(checkForWin(column, i)) {
 					System.out.println("Spieler " + turn + " Gewinnt");

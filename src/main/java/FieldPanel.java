@@ -10,38 +10,43 @@ public class FieldPanel extends JPanel {
 	private int columns;
 	
 	private int[][] stones;
+	
+	private Graphics _g;
+	private IngameUI ui;
 
-	public FieldPanel(int w, int h) {
+	public FieldPanel(int w, int h, IngameUI ingameUi) {
+		_g = this.getGraphics();
+		this.setSize(100 * w, 100 * h);
 		columns = w;
 		rows = h;
-		stones = new int[w][h];
-		for (int i = 0; i <= w; i++) {
-			for (int j = 0; i <= h; i++) {
-				stones[i][j] = 0;
-			}
-		}
+		ui = ingameUi;
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);
 		g.setPaintMode();
+		this.setSize(100 * columns, 100 * rows);
+
 		for (int i = 0; i <= columns - 1; i++) {
-			g.drawLine((this.getWidth()/columns) * i, 0,(this.getWidth()/columns) * i , this.getHeight());
+			g.drawLine(((this.getWidth() /columns)) * i, 0,(this.getWidth()/columns) * i , this.getHeight());
 		}
 		for (int i = 0; i <= rows - 1; i++) {
 			g.drawLine(0, (this.getHeight()/rows) * i, this.getWidth(),(this.getHeight()/rows) * i );
 		}
 		
 
-		for (int i = 0; i <= columns; i++) {
-			for (int j = 0; i <= rows; i++) {
-				switch (stones[i][j]) {
+		for (int i = 0; i <= columns - 1; i++) {
+			for (int j = 0; j <= rows - 1; j++) {
+				switch (ui._gameapi._board[i][j]) {
 				case 1:
-					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* j , Color.red, g);
-					System.out.println("drawing");
+					drawCircle((this.getWidth()/(columns * 2)) + this.getWidth() / columns * i,
+							this.getHeight() - (this.getHeight()/(rows * 2)) + this.getHeight() / rows * j, 
+							Color.blue, g);
 				case 2:
-					drawCircle((this.getWidth()/(columns * 2))* i,(this.getHeight()/(rows * 2))* j , Color.blue, g);
+					drawCircle((this.getWidth()/(columns * 2)) + this.getWidth() / columns * i,
+							this.getHeight() - (this.getHeight()/(rows * 2)) + this.getHeight() / rows * j, 
+							Color.red, g);
 				}
 			}
 		
@@ -50,13 +55,13 @@ public class FieldPanel extends JPanel {
 	
 	
 	public void dropStone(int column, int row, int turn) {
-		stones[column][row] = turn;
-		
+		super.repaint();
 	}
 	
 	private void drawCircle(int x, int y, Color c, Graphics g) {
 		g.setColor(c);
 		
-		g.drawOval(x-10, y-10, 20, 20);
+		g.fillOval(x-20, y-20, 40, 40);
 	}
+
 }

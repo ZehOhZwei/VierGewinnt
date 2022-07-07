@@ -23,7 +23,7 @@ public class IngameUI{
 		gamePanel.setLayout(new BorderLayout());
 		columnButtons= new JButton[w];
 		buttonPanel = new JPanel();
-		fieldPanel = new FieldPanel(w, h);
+		fieldPanel = new FieldPanel(w, h, this);
 		fieldPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		gamePanel.add(buttonPanel, BorderLayout.NORTH);
 		gamePanel.add(fieldPanel, BorderLayout.CENTER);

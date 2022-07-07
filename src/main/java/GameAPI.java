@@ -8,9 +8,6 @@ public class GameAPI {
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
-	public Player player1;
-	public Player player2;
-	private boolean gameOngoing;
 	
 	public GameAPI(int w, int h)
 	{
@@ -22,8 +19,6 @@ public class GameAPI {
 		_y = h;
 		Random random= new Random();
 		turn = random.nextInt(1, 2);
-		player1 = new Human(this);
-		player2 = new Human(this);
 	}
 	
 	public GameAPI(int w, int h, Bot bot)
@@ -52,7 +47,7 @@ public class GameAPI {
 				if(checkForWin(column, i)) {
 					System.out.println("Spieler " + turn + " Gewinnt");
 				}
-				checkForDraw();
+				//checkForDraw();
 				return;
 			}
 		}     
@@ -252,10 +247,9 @@ public class GameAPI {
 			{
 				return i;
 			}
-		}    
+		}
 		return -1;
 	}
-	
 	
 
 }

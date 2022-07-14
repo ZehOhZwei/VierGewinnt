@@ -8,9 +8,9 @@ public class StandardBot implements Bot{
 		int[] results = new int[simulation.getWidth()];
 		int i=0;
 		simulation.dropStone(i);
-		if(game.checkForWin(game.getHighestEmptySpace(i), i)) {
-			results[i]=2;
-		}
+		//if(game.checkForWin(game.getHighestEmptySpace(i), i)) {
+		//	results[i]=2;
+		//}
 		
 		return results;
 	}

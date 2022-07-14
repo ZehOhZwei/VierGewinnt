@@ -37,7 +37,14 @@ public class FieldPanel extends JPanel {
 		super.paintComponent(g);
 		g.setColor(Color.black);
 		g.setPaintMode();
-		this.setSize(100 * columns, 100 * rows);
+		if(columns == 10)
+		{
+			this.setSize(700, 700);
+		}
+		else 
+		{
+			this.setSize(100 * columns, 100 * rows);
+		}
 		g.drawRect(0, 0, this.getWidth(), this.getHeight());
 
 		for (int i = 0; i <= columns - 1; i++) {

@@ -43,7 +43,8 @@ public class GameUI{
 		choiceContainer.add(botSelection);
 		
 		modeSelection = new Choice();
-		modeSelection.add("Standard");
+		modeSelection.add("7x6");
+		modeSelection.add("10x10");
 		choiceContainer.add(modeSelection);
 
 		botDifficultySelection= new Choice();
@@ -60,7 +61,13 @@ public class GameUI{
 	
 	public void startGame()
 	{
-		GameController.startGame();
+		if(modeSelection.getSelectedIndex() == 0) {
+			GameController.startGame(7, 6);
+		}
+		if(modeSelection.getSelectedIndex() == 1)
+		{
+			GameController.startGame(10, 10);
+		}
 		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 
 	}

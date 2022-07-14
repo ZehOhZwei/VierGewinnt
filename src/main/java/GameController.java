@@ -4,7 +4,7 @@ public class GameController {
 		
 	}
 
-	public static void startGame() {
-		GameAPI gameapi=new GameAPI(7,6);
+	public static void startGame(int x, int y) {
+		GameAPI gameapi=new GameAPI(x,y);
 	}
 }

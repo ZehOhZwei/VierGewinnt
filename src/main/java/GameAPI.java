@@ -118,7 +118,7 @@ public class GameAPI {
 		}
 		else return;
 	}
-
+	
 	// Diese genesteten if-statements sind n�tig, weil ansonsten �ber die Bounds des
 	// Arrays hinausgegangen wird
 	public boolean checkHorizontal(int x, int y) {

@@ -56,7 +56,7 @@ public class FieldPanel extends JPanel {
 
 		for (int i = 0; i <= columns - 1; i++) {
 			for (int j = 0; j <= rows - 1; j++) {
-				switch (ui._gameapi._board[i][j]) {
+				switch (ui._gameapi._board.getCell(j, i)) {
 				case 1:
 					drawCircle((this.getWidth() / (columns * 2)) + this.getWidth() / columns * i,
 							this.getHeight() - (this.getHeight() / (rows * 2)) - this.getHeight() / rows * j, Color.red,

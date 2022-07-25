@@ -32,17 +32,12 @@ public class GameAPI {
 	}
 
 	public void dropStone(int column) {
-		System.out.println(_board.length);
-
-		System.out.println("Player " + turn + " drops piece in column " + (column + 1));
 		for (int i = 0; i <= _y; i++) {
 			if (_board[column][i] == 0) {
 				_board[column][i] = turn;
 				ui.dropStone(column, i, turn);
 
-				if (checkForWin(column, i)) {
-					System.out.println("Spieler " + turn + " Gewinnt");
-				}
+				checkForWin();
 				// checkForDraw();
 				switchTurn();
 				return;
@@ -53,8 +48,6 @@ public class GameAPI {
 	}
 
 	public void turnLeft() {
-		System.out.println(_board.length);
-
 		int[][] newBoard = new int[_y][_x];
 		for (int i = 0; i < _x; i++) {
 			for (int j = 0; j < _y; j++) {
@@ -73,6 +66,7 @@ public class GameAPI {
 				cascadeDown(i, j);
 			}
 		}
+		checkForWin();
 		ui.fieldPanel.turn(_x, _y);
 		switchTurn();
 	}
@@ -96,6 +90,7 @@ public class GameAPI {
 				cascadeDown(i, j);
 			}
 		}
+		checkForWin();
 		ui.fieldPanel.turn(_x, _y);
 		switchTurn();
 	}
@@ -115,11 +110,12 @@ public class GameAPI {
 				cascadeDown(i, j - 1);
 			} else
 				return;
-		}
-		else return;
+		} else
+			return;
 	}
 	
-	// Diese genesteten if-statements sind n�tig, weil ansonsten �ber die Bounds des
+	// Diese genesteten if-statements sind n�tig, weil ansonsten �ber die Bounds
+	// des
 	// Arrays hinausgegangen wird
 	public boolean checkHorizontal(int x, int y) {
 		int i = 1;
@@ -278,9 +274,20 @@ public class GameAPI {
 		return (i >= 4);
 	}
 
-	public boolean checkForWin(int x, int y) {
-		return (checkHorizontal(x, y) || checkVertical(x, y) || checkDiagonalRising(x, y)
-				|| checkDiagonalFalling(x, y));
+	public void checkForWin() {
+
+		for (int i = 0; i < _x - 1; i++) {
+			for (int j = 0; j < _y - 1; j++) {
+				if (_board[i][j] != 0) {
+
+					if ((checkHorizontal(i, j) || checkVertical(i, j) || checkDiagonalRising(i, j)
+							|| checkDiagonalFalling(i, j))) {
+						WinWindow win = new WinWindow(turn, this);
+						System.out.println("Player " + turn + " wins");
+					}
+				}
+			}
+		}
 	}
 
 	public boolean checkForDraw() {

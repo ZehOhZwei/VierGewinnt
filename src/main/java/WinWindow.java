@@ -33,7 +33,7 @@ public class WinWindow {
 		restart.addActionListener(e -> {
 			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 			api.ui.window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-			new GameAPI(api._x, api._y);
+			new GameAPI(api._initX, api._initY);
 			});
 		close = new JButton("Close");
 		close.addActionListener(e -> {

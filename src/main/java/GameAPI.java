@@ -9,28 +9,50 @@ public class GameAPI {
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
+	public int _initX;
+	public int _initY;
 
+	
+	
+	/**
+	 * The Constructor ususally used for the 
+	 * 
+	 * @param w
+	 * @param h
+	 */
 	public GameAPI(int w, int h) {
 		ui = new IngameUI(this, w, h);
 
 		againstBot = false;
 		_x = w;
 		_y = h;
+		_initX = _x;
+		_initY = _y;
 		_board = new int[_x][_y];
 		turn = 1;
 		System.out.println(_board.length);
 	}
 
+	/**
+	 * @param w
+	 * @param h
+	 * @param bot
+	 */
 	public GameAPI(int w, int h, Bot bot) {
 		againstBot = true;
 		_bot = bot;
 		_x = w;
 		_y = h;
+		_initX = _x;
+		_initY = _y;
 		_board = new int[_x][_y];
 		turn = 1;
 
 	}
 
+	/**
+	 * @param column
+	 */
 	public void dropStone(int column) {
 		for (int i = 0; i <= _y; i++) {
 			if (_board[column][i] == 0) {
@@ -47,6 +69,9 @@ public class GameAPI {
 		return;
 	}
 
+	/**
+	 * 
+	 */
 	public void turnLeft() {
 		int[][] newBoard = new int[_y][_x];
 		for (int i = 0; i < _x; i++) {
@@ -71,6 +96,9 @@ public class GameAPI {
 		switchTurn();
 	}
 
+	/**
+	 * 
+	 */
 	public void turnRight() {
 		int[][] newBoard = new int[_y][_x];
 		for (int i = 0; i < _x; i++) {
@@ -95,6 +123,7 @@ public class GameAPI {
 		switchTurn();
 	}
 
+
 	private void switchTurn() {
 		if (turn == 1)
 			turn = 2;
@@ -114,9 +143,11 @@ public class GameAPI {
 			return;
 	}
 
-	// Diese genesteten if-statements sind n�tig, weil ansonsten �ber die Bounds
-	// des
-	// Arrays hinausgegangen wird
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkHorizontal(int x, int y) {
 		int i = 1;
 		if (x - 1 >= 0) {
@@ -156,6 +187,11 @@ public class GameAPI {
 		return (i >= 4);
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkVertical(int x, int y) {
 		int i = 1;
 		if (y - 1 >= 0) {
@@ -195,6 +231,11 @@ public class GameAPI {
 		return (i >= 4);
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkDiagonalRising(int x, int y) {
 		int i = 1;
 
@@ -235,6 +276,11 @@ public class GameAPI {
 		return (i >= 4);
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkDiagonalFalling(int x, int y) {
 		int i = 1;
 		if (x - 1 >= 0 && y + 1 >= 0) {
@@ -274,6 +320,9 @@ public class GameAPI {
 		return (i >= 4);
 	}
 
+	/**
+	 * 
+	 */
 	public void checkForWin() {
 
 		for (int i = 0; i < _x - 1; i++) {
@@ -290,6 +339,9 @@ public class GameAPI {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	public boolean checkForDraw() {
 		for (int i = 0; i <= _x; i++) {
 			if (_board[i][_y] == 0) {
@@ -299,14 +351,24 @@ public class GameAPI {
 		return true;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getHeight() {
 		return _y;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getWidth() {
 		return _x;
 	}
 
+	/**
+	 * @param column
+	 * @return
+	 */
 	public int getHighestEmptySpace(int column) {
 		for (int i = 0; i <= _y; i++) {
 			if (_board[column][i] == 0) {

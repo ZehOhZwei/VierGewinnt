@@ -16,6 +16,21 @@ public class IngameUI {
 	FieldPanel fieldPanel;
 	JButton[] columnButtons;
 
+	
+	
+	/**
+	 * The Constructor for the IngameUI. Firstly initializes three JPanels. 
+	 * One for the row of buttons on the top of the screen,
+	 * One for the playing field in the middle and one to contain the two others.
+	 * Then a window is created and set visible to house the components.
+	 * Lastly the row of buttons is created. The "left" and "right" buttons are created manually,
+	 * but the buttons for choosing a column are created based on how many columns there are on the field.
+	 * For this, we create an array of JButtons and initialize them each in a for-loop. 
+	 * 
+	 * @param gameapi the GameAPI that created this IngameUI, saved here for later reference.
+	 * @param w the width of the playing field
+	 * @param h the height of the playing field
+	 */
 	public IngameUI(GameAPI gameapi, int w, int h) {
 		_gameapi = gameapi;
 
@@ -56,8 +71,11 @@ public class IngameUI {
 
 	}
 
-	public void dropStone(int column, int row, int turn) {
-		fieldPanel.dropStone(column, row, turn);
+	/**
+	 * Calls the update method in the FieldPanel
+	 */
+	public void update() {
+		fieldPanel.update();
 	}
 
 }

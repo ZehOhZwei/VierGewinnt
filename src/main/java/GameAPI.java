@@ -3,7 +3,7 @@ import java.util.Random;
 //comment and me
 public class GameAPI {
 	public IngameUI ui;
-	public int[][] _board;
+	public PlayingField _board;
 	public int _x;
 	public int _y;
 	public int turn;
@@ -15,10 +15,13 @@ public class GameAPI {
 	
 	
 	/**
-	 * The Constructor ususally used for the 
+	 * The constructor for if there is no Bot present in the game. 
+	 * Creates a new IngameUI with the given width and height parameters 
+	 * and sets some variables to be able to start the game.
+	 * Player 1 will always have the first move.
 	 * 
-	 * @param w
-	 * @param h
+	 * @param w The width of the playing field
+	 * @param h The height of the Playing field
 	 */
 	public GameAPI(int w, int h) {
 		ui = new IngameUI(this, w, h);
@@ -28,15 +31,17 @@ public class GameAPI {
 		_y = h;
 		_initX = _x;
 		_initY = _y;
-		_board = new int[_x][_y];
+		_board = new PlayingField(_x, _y, this);
 		turn = 1;
-		System.out.println(_board.length);
 	}
 
 	/**
-	 * @param w
-	 * @param h
-	 * @param bot
+	 * The overloaded constructor for the game against a Bot. 
+	 * Does everything the other constructer does as well as set the variable AgainstBot to true.
+	 * 
+	 * @param w The width of the playing field
+	 * @param h The height of the Playing field
+	 * @param bot the Bot that was created earlier and that will be used for the game
 	 */
 	public GameAPI(int w, int h, Bot bot) {
 		againstBot = true;
@@ -45,81 +50,43 @@ public class GameAPI {
 		_y = h;
 		_initX = _x;
 		_initY = _y;
-		_board = new int[_x][_y];
+		_board = new PlayingField(_x, _y, this);
 		turn = 1;
 
 	}
 
 	/**
-	 * @param column
+	 * Calls the method dropStone in the PlayingField and switches the turn to the other player.
+	 * Importantly, the int column here refers to the place in the array meaning that 
+	 * for a stone to be dropped in the first column, the value 0 needs to be passed in the method.
+	 * 
+	 * @param column the column into which the stone is going to be dropped.
 	 */
 	public void dropStone(int column) {
-		for (int i = 0; i <= _y; i++) {
-			if (_board[column][i] == 0) {
-				_board[column][i] = turn;
-				ui.dropStone(column, i, turn);
-
-				checkForWin();
-				// checkForDraw();
-				switchTurn();
-				return;
-			}
-		}
+		_board.dropStone(column, turn);
+		ui.update();
 		switchTurn();
-		return;
 	}
 
 	/**
-	 * 
+	 * Calls the turnLeft method in the PlayingField, passing the current turn so that CheckForWin can work properly
+	 * After this, the UI needs to be updated to a new playing field so the new bounds of the playing field are given to the FieldPanel
+	 * Finally, the turn is switched to the other player so rotating the playing field also constitutes a turn
 	 */
 	public void turnLeft() {
-		int[][] newBoard = new int[_y][_x];
-		for (int i = 0; i < _x; i++) {
-			for (int j = 0; j < _y; j++) {
-				newBoard[_y - j - 1][i] = _board[i][j];
-			}
-		}
-
-		_board = newBoard;
-		int newX = _y;
-		int newY = _x;
-		_x = newX;
-		_y = newY;
-
-		for (int i = 0; i < _x; i++) {
-			for (int j = 1; j < _y; j++) {
-				cascadeDown(i, j);
-			}
-		}
-		checkForWin();
-		ui.fieldPanel.turn(_x, _y);
+		_board.turnLeft();
+		ui.fieldPanel.rotate(_x, _y);
 		switchTurn();
 	}
 
 	/**
-	 * 
+	 * Calls the turnRight method in the PlayingField, passing the current turn so that CheckForWin can work properly
+	 * After this, the UI needs to be updated to a new playing field so the new bounds of the playing field are given to the FieldPanel
+	 * Finally, the turn is switched to the other player so rotating the playing field also constitutes a turn
 	 */
 	public void turnRight() {
-		int[][] newBoard = new int[_y][_x];
-		for (int i = 0; i < _x; i++) {
-			for (int j = 0; j < _y; j++) {
-				newBoard[j][_x - i - 1] = _board[i][j];
-			}
-		}
-
-		_board = newBoard;
-		int newX = _y;
-		int newY = _x;
-		_x = newX;
-		_y = newY;
-
-		for (int i = 0; i < _x; i++) {
-			for (int j = 1; j < _y; j++) {
-				cascadeDown(i, j);
-			}
-		}
-		checkForWin();
-		ui.fieldPanel.turn(_x, _y);
+		_board.turnRight();
+		ui.fieldPanel.rotate(_x, _y);
 		switchTurn();
 	}
 
@@ -131,251 +98,38 @@ public class GameAPI {
 			turn = 1;
 	}
 
-	private void cascadeDown(int i, int j) {
-		if (j > 0 && _board[i][j] != 0) {
-			if (_board[i][j - 1] == 0) {
-				_board[i][j - 1] = _board[i][j];
-				_board[i][j] = 0;
-				cascadeDown(i, j - 1);
-			} else
-				return;
-		} else
-			return;
+	public int getCell(int x,int  y) {
+		return _board.getCell(x, y);
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public boolean checkHorizontal(int x, int y) {
-		int i = 1;
-		if (x - 1 >= 0) {
-			if (_board[x - 1][y] == turn) {
-				i++;
-				if (x - 2 >= 0) {
-					if (_board[x - 2][y] == turn) {
-						i++;
-						if (x - 3 >= 0) {
-							if (_board[x - 3][y] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		if (x + 1 > _x) {
-			if (_board[x + 1][y] == turn) {
-				i++;
-				if (x + 2 > _x) {
-					if (_board[x + 2][y] == turn) {
-						i++;
-						if (x + 3 > _x) {
-							if (_board[x + 3][y] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return (i >= 4);
-	}
 
 	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public boolean checkVertical(int x, int y) {
-		int i = 1;
-		if (y - 1 >= 0) {
-			if (_board[x][y - 1] == turn) {
-				i++;
-				if (y - 2 >= 0) {
-					if (_board[x][y - 2] == turn) {
-						i++;
-						if (y - 3 >= 0) {
-							if (_board[x][y - 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		if (y + 1 > _x) {
-			if (_board[x][y + 1] == turn) {
-				i++;
-				if (y + 2 > _x) {
-					if (_board[x][y + 2] == turn) {
-						i++;
-						if (y + 3 > _x) {
-							if (_board[x][y + 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return (i >= 4);
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public boolean checkDiagonalRising(int x, int y) {
-		int i = 1;
-
-		if (x - 1 >= 0 && y - 1 >= 0) {
-			if (_board[x - 1][y - 1] == turn) {
-				i++;
-				if (x - 2 >= 0 && y - 2 >= 0) {
-					if (_board[x - 2][y - 2] == turn) {
-						i++;
-						if (x - 3 >= 0 && y - 3 >= 0) {
-							if (_board[x - 3][y - 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		if (x + 1 >= _x && y + 1 >= _y) {
-			if (_board[x + 1][y + 1] == turn) {
-				i++;
-				if (x + 2 >= _x && y + 2 >= _y) {
-					if (_board[x + 2][y + 2] == turn) {
-						i++;
-						if (x + 3 >= _x && y + 3 >= _y) {
-							if (_board[x + 3][y + 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return (i >= 4);
-	}
-
-	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public boolean checkDiagonalFalling(int x, int y) {
-		int i = 1;
-		if (x - 1 >= 0 && y + 1 >= 0) {
-			if (_board[x - 1][y + 1] == turn) {
-				i++;
-				if (x - 2 >= 0 && y + 2 >= 0) {
-					if (_board[x - 2][y + 2] == turn) {
-						i++;
-						if (x - 3 >= 0 && y + 3 >= 0) {
-							if (_board[x - 3][y + 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		if (x + 1 >= _x && y - 1 >= _y) {
-			if (_board[x + 1][y - 1] == turn) {
-				i++;
-				if (x + 2 >= _x && y - 2 >= _y) {
-					if (_board[x + 2][y - 2] == turn) {
-						i++;
-						if (x + 3 >= _x && y - 3 >= _y) {
-							if (_board[x + 3][y - 3] == turn)
-
-							{
-								i++;
-							}
-						}
-					}
-				}
-			}
-		}
-		return (i >= 4);
-	}
-
-	/**
+	 * Gets the current height of the board, calling the getHeight method in the PlayingField
 	 * 
+	 * @return the boards height
 	 */
-	public void checkForWin() {
-
-		for (int i = 0; i < _x - 1; i++) {
-			for (int j = 0; j < _y - 1; j++) {
-				if (_board[i][j] != 0) {
-
-					if ((checkHorizontal(i, j) || checkVertical(i, j) || checkDiagonalRising(i, j)
-							|| checkDiagonalFalling(i, j))) {
-						WinWindow win = new WinWindow(turn, this);
-						System.out.println("Player " + turn + " wins");
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean checkForDraw() {
-		for (int i = 0; i <= _x; i++) {
-			if (_board[i][_y] == 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * @return
-	 */
+	
 	public int getHeight() {
-		return _y;
+		return _board.getHeight();
 	}
 
 	/**
-	 * @return
+	 * Gets the current width of the board, calling the getWidth method in the PlayingField
+	 * 
+	 * @return the boards width
 	 */
 	public int getWidth() {
-		return _x;
+		return _board.getWidth();
 	}
 
 	/**
-	 * @param column
-	 * @return
+	 * Calls the getHighestEmptySpace method in the PlayingField
+	 * 
+	 * @param column the column that needs to be checked
+	 * @return the highest empty space in the specified column
 	 */
 	public int getHighestEmptySpace(int column) {
-		for (int i = 0; i <= _y; i++) {
-			if (_board[column][i] == 0) {
-				return i;
-			}
-		}
-		return -1;
+		return _board.getHighestEmptySpace(column);
 	}
 
 }

@@ -13,25 +13,53 @@ public class FieldPanel extends JPanel {
 	private Graphics _g;
 	private IngameUI ui;
 
+	/**
+	 * The constructor for the FieldPanel. Firstly saves some variables, 
+	 * then sets the width and height to 100 times their value. 
+	 * This serves to give the later methods a good frame of reference
+	 * 
+	 * @param w the width of the playing field
+	 * @param h the height of the playing field
+	 * @param ingameUi a reference to the IngameUI that houses this FieldPanel
+	 */
 	public FieldPanel(int w, int h, IngameUI ingameUi) {
 		_g = this.getGraphics();
-		this.setSize(100 * w, 100 * h);
 		columns = w;
 		rows = h;
 		ui = ingameUi;
+		this.setSize(100 * w, 100 * h);
 	}
 
-	public void dropStone(int column, int row, int turn) {
+	/**
+	 * A method that calls the super.repaint method. 
+	 * This method is called every time a stone is dropped into the playing field.
+	 */
+	public void update() {
 		super.repaint();
 	}
 
-	public void turn(int newColumns, int newRows) {
+	/**
+	 * A method that calls the super.repaint method 
+	 * as well as updating the width and height of the playing field
+	 * THis method is called every time the playing field is turned. 
+	 * 
+	 * @param newColumns
+	 * @param newRows
+	 */
+	public void rotate(int newColumns, int newRows) {
 		rows = newRows;
 		columns = newColumns;
 		super.repaint();
 
 	}
 
+	/**
+	 * The overriden PaintComponent method of this JPanel. 
+	 * This creates the playing field grid and 
+	 * uses the GetCell method of the GameAPI to display every stone that has been dropped so far using a for loop.
+	 * This is done by calculating the middle point of each cell in the grid. 
+	 * Since the grid can have different sizes this has to be calculated every time
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -56,7 +84,7 @@ public class FieldPanel extends JPanel {
 
 		for (int i = 0; i <= columns - 1; i++) {
 			for (int j = 0; j <= rows - 1; j++) {
-				switch (ui._gameapi._board[i][j]) {
+				switch (ui._gameapi._board.getCell(j, i)) {
 				case 1:
 					drawCircle((this.getWidth() / (columns * 2)) + this.getWidth() / columns * i,
 							this.getHeight() - (this.getHeight() / (rows * 2)) - this.getHeight() / rows * j, Color.red,

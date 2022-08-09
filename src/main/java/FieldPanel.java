@@ -65,47 +65,39 @@ public class FieldPanel extends JPanel {
 		super.paintComponent(g);
 		g.setColor(Color.black);
 		g.setPaintMode();
-		if(columns == 10)
-		{
-			this.setSize(700, 700);
-		}
-		else 
-		{
-			this.setSize(100 * columns, 100 * rows);
-		}
-		g.drawRect(0, 0, this.getWidth(), this.getHeight());
-
+		g.clearRect(0, 0, getWidth(), getHeight());
+		
 		for (int i = 0; i <= columns - 1; i++) {
 			g.drawLine(((this.getWidth() / columns)) * i, 0, (this.getWidth() / columns) * i, this.getHeight());
 		}
 		for (int i = 0; i <= rows - 1; i++) {
 			g.drawLine(0, (this.getHeight() / rows) * i, this.getWidth(), (this.getHeight() / rows) * i);
 		}
-
+		
 		for (int i = 0; i <= columns - 1; i++) {
 			for (int j = 0; j <= rows - 1; j++) {
-				switch (ui._gameapi._board.getCell(j, i)) {
+				switch (ui._gameapi._board.getCell(i, j)) {
 				case 1:
-					drawCircle((this.getWidth() / (columns * 2)) + this.getWidth() / columns * i,
-							this.getHeight() - (this.getHeight() / (rows * 2)) - this.getHeight() / rows * j, Color.red,
-							g);
+					drawCircleOnGrid(i, j, Color.red, g);
 					break;
 				case 2:
-					drawCircle((this.getWidth() / (columns * 2)) + this.getWidth() / columns * i,
-							this.getHeight() - (this.getHeight() / (rows * 2)) - this.getHeight() / rows * j,
-							Color.blue, g);
+					drawCircleOnGrid(i, j, Color.blue, g);
 					break;
 				default:
-
+	
 				}
 			}
-
 		}
+	}
+	
+	private void drawCircleOnGrid(int x, int y, Color c, Graphics g) {
+		drawCircle((this.getWidth() / (columns * 2)) + this.getWidth() / columns * x,
+				this.getHeight() - (this.getHeight() / (rows * 2)) - this.getHeight() / rows * y,
+				c, g);
 	}
 
 	private void drawCircle(int x, int y, Color c, Graphics g) {
 		g.setColor(c);
-
 		g.fillOval(x - 20, y - 20, 40, 40);
 	}
 

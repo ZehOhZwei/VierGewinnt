@@ -1,10 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayingField {
 
 	private int[][] _board;
-	private int _x;
-	private int _y;
-	private GameAPI api;
+	private int width;
+	private int height;
 
 	/**
 	 * The constructor for the PlayingField. This only saves the passed in variables
@@ -15,11 +16,17 @@ public class PlayingField {
 	 * @param y       the height of the playing field
 	 * @param gameAPI A reference to the GameAPI that created this PlayingField
 	 */
-	public PlayingField(int x, int y, GameAPI gameAPI) {
+	public PlayingField(int x, int y) {
 		_board = new int[x][y];
-		_x = x;
-		_y = y;
-		api = gameAPI;
+		width = x;
+		height = y;
+	}
+
+	private PlayingField(int[][] _board, int _x, int _y) {
+		super();
+		this._board = _board;
+		this.width = _x;
+		this.height = _y;
 	}
 
 	/**
@@ -28,12 +35,18 @@ public class PlayingField {
 	 * 
 	 * @param column the column in which to drop a stone
 	 * @param turn   the current turn, used for the check for win method
+	 * @return true if valid move
 	 */
-	public void dropStone(int column, int turn) {
-		setCell(column, getHighestEmptySpace(column), turn);
-		checkForWin(turn);
+	public boolean dropStone(int column, int turn) {
+		int lowestEmptySpace = getLowestEmptySpace(column);
+		
+		if (lowestEmptySpace < 0) {
+			return false;
+		}
+		
+		setCell(column, lowestEmptySpace, turn);
 		// checkForDraw();
-		return;
+		return true;
 	}
 
 	/**
@@ -46,26 +59,24 @@ public class PlayingField {
 	 * anyone to win.
 	 */
 	public void turnLeft() {
-		int[][] newBoard = new int[_y][_x];
-		for (int i = 0; i < _x; i++) {
-			for (int j = 0; j < _y; j++) {
-				newBoard[_y - j - 1][i] = _board[i][j];
+		int[][] newBoard = new int[height][width];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				newBoard[height - j - 1][i] = _board[i][j];
 			}
 		}
 
 		_board = newBoard;
-		int newX = _y;
-		int newY = _x;
-		_x = newX;
-		_y = newY;
+		int newX = height;
+		int newY = width;
+		width = newX;
+		height = newY;
 
-		for (int i = 0; i < _x; i++) {
-			for (int j = 1; j < _y; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 1; j < height; j++) {
 				cascadeDown(i, j);
 			}
 		}
-		checkForWin(1);
-		checkForWin(2);
 	}
 
 	/**
@@ -78,26 +89,24 @@ public class PlayingField {
 	 * anyone to win.
 	 */
 	public void turnRight() {
-		int[][] newBoard = new int[_y][_x];
-		for (int i = 0; i < _x; i++) {
-			for (int j = 0; j < _y; j++) {
-				newBoard[j][_x - i - 1] = _board[i][j];
+		int[][] newBoard = new int[height][width];
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				newBoard[j][width - i - 1] = _board[i][j];
 			}
 		}
 
 		_board = newBoard;
-		int newX = _y;
-		int newY = _x;
-		_x = newX;
-		_y = newY;
+		int newX = height;
+		int newY = width;
+		width = newX;
+		height = newY;
 
-		for (int i = 0; i < _x; i++) {
-			for (int j = 1; j < _y; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 1; j < height; j++) {
 				cascadeDown(i, j);
 			}
 		}
-		checkForWin(1);
-		checkForWin(2);
 	}
 
 	private void cascadeDown(int i, int j) {
@@ -131,39 +140,39 @@ public class PlayingField {
 	 * @param turn the value for which should be checked.
 	 * @return a boolean value representing whether or not the current player has four in a row
 	 */
-	public boolean checkHorizontal(int x, int y, int turn) {
-		int i = 1;
+	public int checkHorizontal(int x, int y, int turn) {
+		int stoneCount = 1;
 		if (x - 1 >= 0) {
 			if (_board[x - 1][y] == turn) {
-				i++;
+				stoneCount++;
 				if (x - 2 >= 0) {
 					if (_board[x - 2][y] == turn) {
-						i++;
+						stoneCount++;
 						if (x - 3 >= 0) {
 							if (_board[x - 3][y] == turn) {
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		if (x + 1 > _x) {
+		if (x + 1 > width) {
 			if (_board[x + 1][y] == turn) {
-				i++;
-				if (x + 2 > _x) {
+				stoneCount++;
+				if (x + 2 > width) {
 					if (_board[x + 2][y] == turn) {
-						i++;
-						if (x + 3 > _x) {
+						stoneCount++;
+						if (x + 3 > width) {
 							if (_board[x + 3][y] == turn) {
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		return (i >= 4);
+		return stoneCount;
 	}
 
 	/**
@@ -185,39 +194,39 @@ public class PlayingField {
 	 * @param turn the value for which should be checked.
 	 * @return a boolean value representing whether or not the current player has four in a row
 	 */
-	public boolean checkVertical(int x, int y, int turn) {
-		int i = 1;
+	public int checkVertical(int x, int y, int turn) {
+		int stoneCount = 1;
 		if (y - 1 >= 0) {
 			if (_board[x][y - 1] == turn) {
-				i++;
+				stoneCount++;
 				if (y - 2 >= 0) {
 					if (_board[x][y - 2] == turn) {
-						i++;
+						stoneCount++;
 						if (y - 3 >= 0) {
 							if (_board[x][y - 3] == turn) {
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		if (y + 1 > _x) {
+		if (y + 1 > width) {
 			if (_board[x][y + 1] == turn) {
-				i++;
-				if (y + 2 > _x) {
+				stoneCount++;
+				if (y + 2 > width) {
 					if (_board[x][y + 2] == turn) {
-						i++;
-						if (y + 3 > _x) {
+						stoneCount++;
+						if (y + 3 > width) {
 							if (_board[x][y + 3] == turn) {
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		return (i >= 4);
+		return stoneCount;
 	}
 
 	/**
@@ -239,42 +248,41 @@ public class PlayingField {
 	 * @param turn the value for which should be checked.
 	 * @return a boolean value representing whether or not the current player has four in a row
 	 */
-	public boolean checkDiagonalRising(int x, int y, int turn) {
-		int i = 1;
-
+	public int checkDiagonalRising(int x, int y, int turn) {
+		int stoneCount = 1;
 		if (x - 1 >= 0 && y - 1 >= 0) {
 			if (_board[x - 1][y - 1] == turn) {
-				i++;
+				stoneCount++;
 				if (x - 2 >= 0 && y - 2 >= 0) {
 					if (_board[x - 2][y - 2] == turn) {
-						i++;
+						stoneCount++;
 						if (x - 3 >= 0 && y - 3 >= 0) {
 							if (_board[x - 3][y - 3] == turn) {
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		if (x + 1 >= _x && y + 1 >= _y) {
+		if (x + 1 < width && y + 1 < height) {
 			if (_board[x + 1][y + 1] == turn) {
-				i++;
-				if (x + 2 >= _x && y + 2 >= _y) {
+				stoneCount++;
+				if (x + 2 < width && y + 2 < height) {
 					if (_board[x + 2][y + 2] == turn) {
-						i++;
-						if (x + 3 >= _x && y + 3 >= _y) {
+						stoneCount++;
+						if (x + 3 < width && y + 3 < height) {
 							if (_board[x + 3][y + 3] == turn)
 
 							{
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		return (i >= 4);
+		return stoneCount;
 	}
 
 	/**
@@ -296,43 +304,43 @@ public class PlayingField {
 	 * @param turn the value for which should be checked.
 	 * @return a boolean value representing whether or not the current player has four in a row
 	 */
-	public boolean checkDiagonalFalling(int x, int y, int turn) {
-		int i = 1;
-		if (x - 1 >= 0 && y + 1 >= 0) {
+	public int checkDiagonalFalling(int x, int y, int turn) {
+		int stoneCount = 1;
+		if (x - 1 >= 0 && y + 1 < height) {
 			if (_board[x - 1][y + 1] == turn) {
-				i++;
-				if (x - 2 >= 0 && y + 2 >= 0) {
+				stoneCount++;
+				if (x - 2 >= 0 && y + 2 < height) {
 					if (_board[x - 2][y + 2] == turn) {
-						i++;
-						if (x - 3 >= 0 && y + 3 >= 0) {
+						stoneCount++;
+						if (x - 3 >= 0 && y + 3 < height) {
 							if (_board[x - 3][y + 3] == turn)
 
 							{
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		if (x + 1 >= _x && y - 1 >= _y) {
+		if (x + 1 >= width && y - 1 >= height) {
 			if (_board[x + 1][y - 1] == turn) {
-				i++;
-				if (x + 2 >= _x && y - 2 >= _y) {
+				stoneCount++;
+				if (x + 2 >= width && y - 2 >= height) {
 					if (_board[x + 2][y - 2] == turn) {
-						i++;
-						if (x + 3 >= _x && y - 3 >= _y) {
+						stoneCount++;
+						if (x + 3 >= width && y - 3 >= height) {
 							if (_board[x + 3][y - 3] == turn)
 
 							{
-								i++;
+								stoneCount++;
 							}
 						}
 					}
 				}
 			}
 		}
-		return (i >= 4);
+		return stoneCount;
 	}
 
 	/**
@@ -340,21 +348,24 @@ public class PlayingField {
 	 * 
 	 * @param turn the specified player for which the win condition should be checked
 	 */
-	public void checkForWin(int turn) {
-
-		for (int i = 0; i < _x - 1; i++) {
-			for (int j = 0; j < _y - 1; j++) {
+	public boolean checkForWin(int turn) {
+		for (int i = 0; i < width - 1; i++) {
+			for (int j = 0; j < height - 1; j++) {
 				if (_board[i][j] == turn) {
-
-					if ((checkHorizontal(i, j, turn) || checkVertical(i, j, turn) || checkDiagonalRising(i, j, turn)
-							|| checkDiagonalFalling(i, j, turn))) {
-						WinWindow win = new WinWindow(turn, api);
+					
+					if (checkHorizontal(i, j, turn) >= 4 
+							|| checkVertical(i, j, turn) >= 4 
+							|| checkDiagonalRising(i, j, turn) >= 4 
+							|| checkDiagonalFalling(i, j, turn) >= 4) {
+						
+						return true;
 					}
 				}
 			}
 		}
+		
+		return false;
 	}
-
 	
 	/**
 	 * This method checks whether there are any free spaces left. 
@@ -363,8 +374,8 @@ public class PlayingField {
 	 * @return a boolean value representing whether a draw has ocurred
 	 */
 	public boolean checkForDraw() {
-		for (int i = 0; i <= _x; i++) {
-			if (_board[i][_y] == 0) {
+		for (int i = 0; i <= width; i++) {
+			if (_board[i][height] == 0) {
 				return false;
 			}
 		}
@@ -380,7 +391,7 @@ public class PlayingField {
 	 */
 	public int getCell(int x, int y) {
 
-		if (x < _x && y < _y) {
+		if (x < width && y < height) {
 			return _board[x][y];
 		}
 		return 0;
@@ -404,7 +415,7 @@ public class PlayingField {
 	 * @return the current height of the playing field
 	 */
 	public int getHeight() {
-		return _y;
+		return height;
 	}
 
 	/**
@@ -413,22 +424,46 @@ public class PlayingField {
 	 * @return the current width of the playing field
 	 */
 	public int getWidth() {
-		return _x;
+		return width;
 	}
 	
 	/**
-	 * Goes through the given column to find the highest empty space in the column.
+	 * Goes through the given column to find the lowest empty space in the column.
 	 * 
 	 * @param column the column that should be checked
-	 * @return either the y-position of the highest empty space or -1 in the case of an error 
+	 * @return either the y-position of the lowest empty space or -1 in the case of an error 
 	 */
-	public int getHighestEmptySpace(int column) {
-		for (int i = 0; i <= _y; i++) {
+	public int getLowestEmptySpace(int column) {
+		for (int i = 0; i < height; i++) {
 			if (_board[column][i] == 0) {
 				return i;
 			}
 		}
 		return -1;
+	}
+
+	public PlayingField copy() {
+		int[][] newBoard = new int[getWidth()][getHeight()];
+		
+		for (int x = 0; x < getWidth(); x++) {
+			for (int y = 0; y < getHeight(); y++) {
+				newBoard[x][y] = _board[x][y];
+			}
+		}
+		
+		return new PlayingField(newBoard, width, height);
+	}
+	
+	public List<PlayingField> getPlayingFieldsForNextMove(int player) {
+		final List<PlayingField> nextMoveBoards = new ArrayList<>(getWidth());
+		
+		for (int col = 0; col < getWidth(); col++) {
+			PlayingField board = this.copy();
+			board.dropStone(col, player);
+			nextMoveBoards.add(board);
+		}
+		
+		return nextMoveBoards;
 	}
 
 }

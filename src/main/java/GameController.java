@@ -1,6 +1,6 @@
 public class GameController {
 	public static void main(String args[]) {
-		new GameUI();	
+		new MenuUI();	
 		
 	}
 	
@@ -14,7 +14,7 @@ public class GameController {
 	 * @param y the height of the playing field that is to be created
 	 * 
 	 **/
-	public static void startGame(int x, int y) {
-		GameAPI gameapi=new GameAPI(x,y);
+	public static void startGame(int x, int y, Bot bot) {
+		GameAPI gameapi = new GameAPI(x, y, bot);
 	}
 }

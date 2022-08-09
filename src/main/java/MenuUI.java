@@ -4,12 +4,14 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
-public class GameUI{
+public class MenuUI{
 	
 	//Settings
 	
 	boolean withBot=false;
+	
 	Bot botType;
+	
 	int gameMode=0;
 	int _height;
 	int _width;
@@ -26,7 +28,7 @@ public class GameUI{
 	
 	JButton start;
 	
-	public GameUI()
+	public MenuUI()
 	{
 		window=new JFrame("Vier Gewinnt");
 		gameSelection = new JPanel();
@@ -61,12 +63,17 @@ public class GameUI{
 	
 	public void startGame()
 	{
+		Bot bot = null;
+		if (botSelection.getSelectedItem().equals("Yes")) {
+			bot = new HardBot(2);
+		}
+		
 		if(modeSelection.getSelectedIndex() == 0) {
-			GameController.startGame(7, 6);
+			GameController.startGame(7, 6, bot);
 		}
 		if(modeSelection.getSelectedIndex() == 1)
 		{
-			GameController.startGame(10, 10);
+			GameController.startGame(10, 10, bot);
 		}
 		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 

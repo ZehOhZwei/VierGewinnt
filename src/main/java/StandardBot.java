@@ -1,6 +1,7 @@
 public class StandardBot implements Bot{
-	public int makeTurn(GameAPI board) {
-		return 0;
+	
+	public PlayingField makeTurn(PlayingField board) {
+		return board;
 	}
 	
 	public int[] simmulateDepth(GameAPI game, int depth){

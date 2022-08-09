@@ -4,15 +4,13 @@ import java.util.Random;
 public class GameAPI {
 	public IngameUI ui;
 	public PlayingField _board;
-	public int _x;
+	public int width;
 	public int _y;
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
 	public int _initX;
 	public int _initY;
-
-	
 	
 	/**
 	 * The constructor for if there is no Bot present in the game. 
@@ -27,11 +25,11 @@ public class GameAPI {
 		ui = new IngameUI(this, w, h);
 
 		againstBot = false;
-		_x = w;
+		width = w;
 		_y = h;
-		_initX = _x;
+		_initX = width;
 		_initY = _y;
-		_board = new PlayingField(_x, _y, this);
+		_board = new PlayingField(width, _y);
 		turn = 1;
 	}
 
@@ -44,17 +42,12 @@ public class GameAPI {
 	 * @param bot the Bot that was created earlier and that will be used for the game
 	 */
 	public GameAPI(int w, int h, Bot bot) {
-		againstBot = true;
+		this(w, h);
+		
+		againstBot = bot != null;
 		_bot = bot;
-		_x = w;
-		_y = h;
-		_initX = _x;
-		_initY = _y;
-		_board = new PlayingField(_x, _y, this);
-		turn = 1;
-
 	}
-
+	
 	/**
 	 * Calls the method dropStone in the PlayingField and switches the turn to the other player.
 	 * Importantly, the int column here refers to the place in the array meaning that 
@@ -63,9 +56,12 @@ public class GameAPI {
 	 * @param column the column into which the stone is going to be dropped.
 	 */
 	public void dropStone(int column) {
-		_board.dropStone(column, turn);
+		boolean stoneDropped = _board.dropStone(column, turn);
+		checkForWinAndShowWinningWindow(turn);
 		ui.update();
-		switchTurn();
+		if (stoneDropped) {
+			switchTurn();
+		}
 	}
 
 	/**
@@ -75,7 +71,9 @@ public class GameAPI {
 	 */
 	public void turnLeft() {
 		_board.turnLeft();
-		ui.fieldPanel.rotate(_x, _y);
+		checkForWinAndShowWinningWindow(1);
+		checkForWinAndShowWinningWindow(2);
+		ui.fieldPanel.rotate(width, _y);
 		switchTurn();
 	}
 
@@ -86,16 +84,25 @@ public class GameAPI {
 	 */
 	public void turnRight() {
 		_board.turnRight();
-		ui.fieldPanel.rotate(_x, _y);
+		checkForWinAndShowWinningWindow(1);
+		checkForWinAndShowWinningWindow(2);
+		ui.fieldPanel.rotate(width, _y);
 		switchTurn();
 	}
 
 
 	private void switchTurn() {
-		if (turn == 1)
+		if (turn == 1) {
 			turn = 2;
-		else if (turn == 2)
+			makeBotTurn();
+		} else if (turn == 2) {
 			turn = 1;
+		}
+	}
+	
+	private void makeBotTurn() {
+		_board = _bot.makeTurn(_board);
+		turn = 1;
 	}
 
 	public int getCell(int x,int  y) {
@@ -123,13 +130,24 @@ public class GameAPI {
 	}
 
 	/**
-	 * Calls the getHighestEmptySpace method in the PlayingField
+	 * Calls the getLowestEmptySpace method in the PlayingField
 	 * 
 	 * @param column the column that needs to be checked
-	 * @return the highest empty space in the specified column
+	 * @return the lowest empty space in the specified column
 	 */
-	public int getHighestEmptySpace(int column) {
-		return _board.getHighestEmptySpace(column);
+	public int getLowestEmptySpace(int column) {
+		return _board.getLowestEmptySpace(column);
 	}
-
+	
+	/**
+	 * This method checks if the given player won and shows a Congratulations window
+	 * 
+	 * @param turn the specified player for which the win condition should be checked
+	 */
+	public void checkForWinAndShowWinningWindow(int turn) {
+		if (_board.checkForWin(turn)) {
+			WinWindow win = new WinWindow(turn, this);
+		}
+	}
+	
 }

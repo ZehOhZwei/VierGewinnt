@@ -6,6 +6,8 @@ public class PlayingField {
 	private int[][] _board;
 	private int width;
 	private int height;
+	
+	String moveName;
 
 	/**
 	 * The constructor for the PlayingField. This only saves the passed in variables
@@ -349,8 +351,8 @@ public class PlayingField {
 	 * @param turn the specified player for which the win condition should be checked
 	 */
 	public boolean checkForWin(int turn) {
-		for (int i = 0; i < width - 1; i++) {
-			for (int j = 0; j < height - 1; j++) {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				if (_board[i][j] == turn) {
 					
 					if (checkHorizontal(i, j, turn) >= 4 
@@ -459,11 +461,34 @@ public class PlayingField {
 		
 		for (int col = 0; col < getWidth(); col++) {
 			PlayingField board = this.copy();
-			board.dropStone(col, player);
-			nextMoveBoards.add(board);
+			if(board.getLowestEmptySpace(col) < height) {
+				board.dropStone(col, player);
+				board.moveName = "dropStone(" + col + ")";
+				nextMoveBoards.add(board);
+			}
 		}
 		
 		return nextMoveBoards;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		
+		for (int y = height - 1; y >= 0; y--) {
+			for (int x = 0; x < getWidth(); x++) {
+				if (_board[x][y] == 1) {
+					b.append("r");
+				} else if (_board[x][y] == 2) {
+					b.append("b");
+				} else if (_board[x][y] == 0) {
+					b.append(".");
+				}
+			}
+			b.append("\n");
+		}
+		
+		return b.toString();
 	}
 
 }

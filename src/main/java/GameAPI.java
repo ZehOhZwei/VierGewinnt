@@ -57,7 +57,6 @@ public class GameAPI {
 	 */
 	public void dropStone(int column) {
 		boolean stoneDropped = _board.dropStone(column, turn);
-		checkForWinAndShowWinningWindow(turn);
 		ui.update();
 		if (stoneDropped) {
 			switchTurn();
@@ -71,8 +70,6 @@ public class GameAPI {
 	 */
 	public void turnLeft() {
 		_board.turnLeft();
-		checkForWinAndShowWinningWindow(1);
-		checkForWinAndShowWinningWindow(2);
 		ui.fieldPanel.rotate(width, _y);
 		switchTurn();
 	}
@@ -84,14 +81,16 @@ public class GameAPI {
 	 */
 	public void turnRight() {
 		_board.turnRight();
-		checkForWinAndShowWinningWindow(1);
-		checkForWinAndShowWinningWindow(2);
 		ui.fieldPanel.rotate(width, _y);
 		switchTurn();
 	}
 
 
 	private void switchTurn() {
+		if (checkForWinAndShowWinningWindow(1) || checkForWinAndShowWinningWindow(2)) {
+			return;
+		}
+		
 		if (turn == 1) {
 			turn = 2;
 			makeBotTurn();
@@ -102,7 +101,8 @@ public class GameAPI {
 	
 	private void makeBotTurn() {
 		_board = _bot.makeTurn(_board);
-		turn = 1;
+		System.out.println(_board.moveName);
+		switchTurn();
 	}
 
 	public int getCell(int x,int  y) {
@@ -144,10 +144,13 @@ public class GameAPI {
 	 * 
 	 * @param turn the specified player for which the win condition should be checked
 	 */
-	public void checkForWinAndShowWinningWindow(int turn) {
+	public boolean checkForWinAndShowWinningWindow(int turn) {
 		if (_board.checkForWin(turn)) {
 			WinWindow win = new WinWindow(turn, this);
+			return true;
 		}
+		
+		return false;
 	}
 	
 }

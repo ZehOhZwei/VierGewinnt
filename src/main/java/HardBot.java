@@ -13,7 +13,10 @@ public class HardBot implements Bot {
 	
 	@Override
 	public PlayingField makeTurn(PlayingField board) {
-		return alphabeta(board, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, true).board;
+		System.out.println("###############");
+		System.out.println(board.toString());
+		System.out.println(evaluateBoardForPlayer(board, botPlayer, false));
+		return alphabeta(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, true).board;
 	}
 	
 	public Move alphabeta(PlayingField node, int depth, int alpha, int beta, boolean maximizingPlayer) {
@@ -22,8 +25,19 @@ public class HardBot implements Bot {
 		int valueForPlayer = evaluateBoardForPlayer(node, player);
 		int valueForOtherPlayer = evaluateBoardForPlayer(node, otherPlayer(player));
 		
-		if (depth == 0 || valueForPlayer == Integer.MAX_VALUE) {
-			return new Move(node, valueForPlayer  - valueForOtherPlayer);
+		System.out.println("DEPTH: " + depth);
+		
+		System.out.println("player: " + player);
+		System.out.println("move: " + node.moveName);
+		System.out.println("valueForPlayer: " + valueForPlayer);
+		System.out.println("valueForOtherPlayer: " + valueForOtherPlayer);
+		
+		if (depth == 0) {
+			if (player == 2) {
+				return new Move(node, valueForPlayer - valueForOtherPlayer);
+			} else {
+				return new Move(node, valueForOtherPlayer - valueForPlayer);
+			}
 		}
 		
 		if (maximizingPlayer) {
@@ -43,6 +57,8 @@ public class HardBot implements Bot {
 				
 				alpha = Math.max(alpha, value);
 			}
+			
+			System.out.println("DEPTH END: " + depth);
 			return new Move(board, value);
 		} else {
 			int value = Integer.MAX_VALUE;
@@ -62,6 +78,7 @@ public class HardBot implements Bot {
 				
 				beta = Math.min(beta, value);
 			}
+			System.out.println("DEPTH END: " + depth);
 			return new Move(board, value);
 		}
 	}
@@ -79,10 +96,21 @@ public class HardBot implements Bot {
 	}
 	
 	private int evaluateBoardForPlayer(PlayingField board, int player) {
-		int foursCount = countRows(board, player, 4);
-		int threesCount = countRows(board, player, 3);
-		int twosCount = countRows(board, player, 2);
-		int stoneCount = countStones(board, player);
+		return evaluateBoardForPlayer(board, player, false);
+	}
+	
+	private int evaluateBoardForPlayer(PlayingField board, int player, boolean debug) {
+		int foursCount = countRows(board, player, 4, debug);
+		int threesCount = countRows(board, player, 3, debug);
+		int twosCount = countRows(board, player, 2, debug);
+		int singleStoneValue = calculateValueOfSingleStone(board, player);
+		
+		if (debug) {
+			System.out.println("twos: " + twosCount);
+			System.out.println("threes: " + threesCount);
+			System.out.println("fours: " + foursCount);
+			System.out.println("singleStoneValue: " + singleStoneValue);
+		}
 		
 		if (foursCount >= 1) {
 			return Integer.MAX_VALUE;
@@ -92,40 +120,60 @@ public class HardBot implements Bot {
 			return 900000;
 		}
 		
-		return stoneCount * SINGLE_STONE_VALUE + twosCount * TWOS_ROW_VALUE + threesCount * THREES_ROW_VALUE;
+		return singleStoneValue + twosCount * TWOS_ROW_VALUE + threesCount * THREES_ROW_VALUE;
 	}
 	
-	private int countStones(PlayingField board, int player) {
-		int stones = 0;
+	private int calculateValueOfSingleStone(PlayingField board, int player) {
+		int value = 0;
 		for (int x = 0; x < board.getWidth(); x++) {
 			for (int y = 0; y < board.getHeight(); y++) {
 				if (board.getCell(x, y) == player) {
-					stones++;
+					value= value + SINGLE_STONE_VALUE + calculateCenterValue(board, x);
 				}
 			}
 		}
-		return stones;
+		return value;
 	}
 	
-	private int countRows(PlayingField board, int player, int rowSize) {
-		int verticalRows = 0;
+	public int calculateCenterValue(PlayingField board, int column) {
+		return 0; // board.getWidth() - Math.abs(board.getWidth() / 2 - column);
+	}
+	
+	private int countRows(PlayingField board, int player, int rowSize, boolean debug) {
+		int rows = 0;
 		for (int x = 0; x < board.getWidth(); x++) {
 			for (int y = 0; y < board.getHeight(); y++) {
+				if (board.getCell(x, y) != player) {
+					continue;
+				}
+				
 				if (board.checkVertical(x, y, player) == rowSize) {
-					verticalRows++;
+					rows++;
+					if (debug) {
+						System.out.println("vertical row at " + x + "|" + y + " for player " + player);
+					}
 				}
 				if (board.checkHorizontal(x, y, player) == rowSize) {
-					verticalRows++;
+					rows++;
+					if (debug) {
+						System.out.println("horizontal row at " + x + "|" + y + " for player " + player);
+					}
 				}
 				if (board.checkDiagonalFalling(x, y, player) == rowSize) {
-					verticalRows++;
+					rows++;
+					if (debug) {
+						System.out.println("falling row at " + x + "|" + y + " for player " + player);
+					}
 				}
 				if (board.checkDiagonalRising(x, y, player) == rowSize) {
-					verticalRows++;
+					rows++;
+					if (debug) {
+						System.out.println("rising row at " + x + "|" + y + " for player " + player);
+					}
 				}
 			}
 		}
-		return verticalRows;
+		return rows;
 	}
 	
 	static class Move {

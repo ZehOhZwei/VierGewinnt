@@ -123,6 +123,13 @@ public class HardBot implements Bot {
 		return singleStoneValue + twosCount * TWOS_ROW_VALUE + threesCount * THREES_ROW_VALUE;
 	}
 	
+	/**
+	 * Gives the value
+	 * 
+	 * @param board The board for which the value is to be calculated
+	 * @param player The player for whom the value is to be calculated for.
+	 * @return returns the value the bot gives to a single stone.
+	 */
 	private int calculateValueOfSingleStone(PlayingField board, int player) {
 		int value = 0;
 		for (int x = 0; x < board.getWidth(); x++) {
@@ -136,9 +143,19 @@ public class HardBot implements Bot {
 	}
 	
 	public int calculateCenterValue(PlayingField board, int column) {
-		return 0; // board.getWidth() - Math.abs(board.getWidth() / 2 - column);
+		return board.getWidth() - Math.abs(board.getWidth() / 2 - column);
 	}
 	
+	/**
+	 * Counts the rows of a designated length for a player on the given board. 
+	 * Where a row are stones set next to each other in the vertical, horizontal or diagonal on the board.
+	 *  
+	 * @param board The board the rows are to be counted on.
+	 * @param player Player whose row's are to be searched
+	 * @param rowSize The size of rows you wish to know
+	 * @param debug
+	 * @return Number of rows
+	 */
 	private int countRows(PlayingField board, int player, int rowSize, boolean debug) {
 		int rows = 0;
 		for (int x = 0; x < board.getWidth(); x++) {
@@ -175,7 +192,10 @@ public class HardBot implements Bot {
 		}
 		return rows;
 	}
-	
+	/**
+	 * A Class used for the bot, contains a board and it's rating by the bot.
+	 * 
+	 */
 	static class Move {
 		public PlayingField board;
 		public int heuristicValue;

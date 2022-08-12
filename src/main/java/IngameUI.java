@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -49,7 +50,7 @@ public class IngameUI {
 		window.setSize(720, 676);
 		window.setVisible(true);
 
-		JButton left = new JButton("<");
+		JButton left = new JButton("⟲");
 		buttonPanel.add(left);
 		left.addActionListener(e -> {
 			_gameapi.turnLeft();
@@ -63,7 +64,7 @@ public class IngameUI {
 				_gameapi.dropStone(iFinal);
 			});
 		}
-		JButton right = new JButton(">");
+		JButton right = new JButton("⟳");
 		buttonPanel.add(right);
 		right.addActionListener(e -> {
 			_gameapi.turnRight();

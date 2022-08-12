@@ -99,10 +99,10 @@ public class PlayingField {
 		}
 
 		_board = newBoard;
-		int newX = height;
-		int newY = width;
-		width = newX;
-		height = newY;
+		int newWidth = height;
+		int newHeight = width;
+		width = newWidth;
+		height = newHeight;
 
 		for (int i = 0; i < width; i++) {
 			for (int j = 1; j < height; j++) {
@@ -159,13 +159,13 @@ public class PlayingField {
 				}
 			}
 		}
-		if (x + 1 > width) {
+		if (x + 1 < width) {
 			if (_board[x + 1][y] == turn) {
 				stoneCount++;
-				if (x + 2 > width) {
+				if (x + 2 < width) {
 					if (_board[x + 2][y] == turn) {
 						stoneCount++;
-						if (x + 3 > width) {
+						if (x + 3 < width) {
 							if (_board[x + 3][y] == turn) {
 								stoneCount++;
 							}
@@ -213,13 +213,13 @@ public class PlayingField {
 				}
 			}
 		}
-		if (y + 1 > width) {
+		if (y + 1 < height) {
 			if (_board[x][y + 1] == turn) {
 				stoneCount++;
-				if (y + 2 > width) {
+				if (y + 2 < height) {
 					if (_board[x][y + 2] == turn) {
 						stoneCount++;
-						if (y + 3 > width) {
+						if (y + 3 < height) {
 							if (_board[x][y + 3] == turn) {
 								stoneCount++;
 							}
@@ -443,7 +443,10 @@ public class PlayingField {
 		}
 		return -1;
 	}
-
+	/**
+	 * 
+	 * @return A copy of the current PlayingField
+	 */
 	public PlayingField copy() {
 		int[][] newBoard = new int[getWidth()][getHeight()];
 		
@@ -456,6 +459,12 @@ public class PlayingField {
 		return new PlayingField(newBoard, width, height);
 	}
 	
+	/**
+	 * Creates a list of PlayingFields for every possible move. (minus turning)
+	 * 
+	 * @param player - The player whose is currently playing
+	 * @return A list of PlayingFields with every possible move made.
+	 */
 	public List<PlayingField> getPlayingFieldsForNextMove(int player) {
 		final List<PlayingField> nextMoveBoards = new ArrayList<>(getWidth());
 		
@@ -470,7 +479,6 @@ public class PlayingField {
 		
 		return nextMoveBoards;
 	}
-	
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder();

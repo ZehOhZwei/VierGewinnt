@@ -5,12 +5,12 @@ public class GameAPI {
 	public IngameUI ui;
 	public PlayingField _board;
 	public int width;
-	public int _y;
+	public int height;
 	public int turn;
 	public boolean againstBot;
 	public Bot _bot;
-	public int _initX;
-	public int _initY;
+	public final int startWidth;
+	public final int startHeight;
 	
 	/**
 	 * The constructor for if there is no Bot present in the game. 
@@ -26,10 +26,10 @@ public class GameAPI {
 
 		againstBot = false;
 		width = w;
-		_y = h;
-		_initX = width;
-		_initY = _y;
-		_board = new PlayingField(width, _y);
+		height = h;
+		startWidth = width;
+		startHeight = height;
+		_board = new PlayingField(width, height);
 		turn = 1;
 	}
 
@@ -70,7 +70,7 @@ public class GameAPI {
 	 */
 	public void turnLeft() {
 		_board.turnLeft();
-		ui.fieldPanel.rotate(width, _y);
+		ui.fieldPanel.rotate(width, height);
 		switchTurn();
 	}
 
@@ -81,7 +81,7 @@ public class GameAPI {
 	 */
 	public void turnRight() {
 		_board.turnRight();
-		ui.fieldPanel.rotate(width, _y);
+		ui.fieldPanel.rotate(width, height);
 		switchTurn();
 	}
 
@@ -100,9 +100,11 @@ public class GameAPI {
 	}
 	
 	private void makeBotTurn() {
-		_board = _bot.makeTurn(_board);
-		System.out.println(_board.moveName);
-		switchTurn();
+		if (againstBot) {
+			_board = _bot.makeTurn(_board);
+			System.out.println(_board.moveName);
+			switchTurn();
+		}
 	}
 
 	public int getCell(int x,int  y) {

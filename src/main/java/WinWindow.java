@@ -3,13 +3,14 @@ import java.awt.Choice;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class WinWindow {
 	
-	JFrame window;
+	JDialog window;
 	JPanel textContainer;
 	JPanel buttonContainer;
 	
@@ -21,7 +22,7 @@ public class WinWindow {
 	
 	public WinWindow(int turn, GameAPI gameAPI)
 	{
-		window = new JFrame("Congratulations!");
+		window = new JDialog(gameAPI.ui.window, "Congratulations!");
 		window.setLayout(new BorderLayout());
 		textContainer = new JPanel();
 		buttonContainer = new JPanel();
@@ -33,13 +34,14 @@ public class WinWindow {
 		restart.addActionListener(e -> {
 			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 			api.ui.window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-			new GameAPI(api._initX, api._initY, api._bot);
+			new GameAPI(api.startWidth, api.startHeight, api._bot);
 			});
 		close = new JButton("Close");
 		close.addActionListener(e -> {
 			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 			api.ui.window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
-			});
+			System.exit(0);
+		});
 	
 		textContainer.add(text);
 		buttonContainer.add(close);

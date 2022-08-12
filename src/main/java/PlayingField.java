@@ -461,7 +461,7 @@ public class PlayingField {
 		
 		for (int col = 0; col < getWidth(); col++) {
 			PlayingField board = this.copy();
-			if(board.getLowestEmptySpace(col) < height) {
+			if(board.getLowestEmptySpace(col) < height && board.getLowestEmptySpace(col)>=0) {
 				board.dropStone(col, player);
 				board.moveName = "dropStone(" + col + ")";
 				nextMoveBoards.add(board);

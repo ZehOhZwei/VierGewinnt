@@ -3,7 +3,7 @@ public class HardBot implements Bot {
 
 	private static final int SINGLE_STONE_VALUE = 100;
 	private static final int TWOS_ROW_VALUE = 500;
-	private static final int THREES_ROW_VALUE = 1500;
+	private static final int THREES_ROW_VALUE = 3000;
 	
 	private final int botPlayer;
 	
@@ -13,10 +13,10 @@ public class HardBot implements Bot {
 	
 	@Override
 	public PlayingField makeTurn(PlayingField board) {
-		System.out.println("###############");
-		System.out.println(board.toString());
-		System.out.println(evaluateBoardForPlayer(board, botPlayer, false));
-		return alphabeta(board, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, true).board;
+//		System.out.println("###############");
+//		System.out.println(board.toString());
+//		System.out.println(evaluateBoardForPlayer(board, botPlayer, false));
+		return alphabeta(board, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, true).board;
 	}
 	
 	public Move alphabeta(PlayingField node, int depth, int alpha, int beta, boolean maximizingPlayer) {
@@ -25,12 +25,12 @@ public class HardBot implements Bot {
 		int valueForPlayer = evaluateBoardForPlayer(node, player);
 		int valueForOtherPlayer = evaluateBoardForPlayer(node, otherPlayer(player));
 		
-		System.out.println("DEPTH: " + depth);
-		
-		System.out.println("player: " + player);
-		System.out.println("move: " + node.moveName);
-		System.out.println("valueForPlayer: " + valueForPlayer);
-		System.out.println("valueForOtherPlayer: " + valueForOtherPlayer);
+//		System.out.println("DEPTH: " + depth);
+//		
+//		System.out.println("player: " + player);
+//		System.out.println("move: " + node.moveName);
+//		System.out.println("valueForPlayer: " + valueForPlayer);
+//		System.out.println("valueForOtherPlayer: " + valueForOtherPlayer);
 		
 		if (depth == 0) {
 			if (player == 2) {
@@ -58,7 +58,7 @@ public class HardBot implements Bot {
 				alpha = Math.max(alpha, value);
 			}
 			
-			System.out.println("DEPTH END: " + depth);
+//			System.out.println("DEPTH END: " + depth);
 			return new Move(board, value);
 		} else {
 			int value = Integer.MAX_VALUE;
@@ -78,7 +78,7 @@ public class HardBot implements Bot {
 				
 				beta = Math.min(beta, value);
 			}
-			System.out.println("DEPTH END: " + depth);
+//			System.out.println("DEPTH END: " + depth);
 			return new Move(board, value);
 		}
 	}
@@ -117,7 +117,7 @@ public class HardBot implements Bot {
 		}
 		
 		if (threesCount >= 2) {
-			return 900000;
+			return 1000000;
 		}
 		
 		return singleStoneValue + twosCount * TWOS_ROW_VALUE + threesCount * THREES_ROW_VALUE;
